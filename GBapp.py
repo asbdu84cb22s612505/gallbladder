@@ -395,7 +395,7 @@ def main():
             response = requests.get(model_url)
             with open(model_path, "wb") as f:
                 f.write(response.content)
-           st.success("Model downloaded successfully!")
+            st.success("Model downloaded successfully!")
     encoder_path = os.path.join(os.getcwd(),"encoderr.pkl") 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     encoder = load_encoder(encoder_path)
