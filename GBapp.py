@@ -12,6 +12,8 @@ from torch.utils.data import DataLoader
 import pathlib
 from pathlib import Path
 import base64
+import requests
+model_url = "https://github.com/asbdu84cb22s612505/gallbladder/releases/download/v1.0.0/Gallbladder31.pth"
 
 class GradientReversal(torch.autograd.Function):
     @staticmethod
@@ -387,8 +389,14 @@ def main():
 """, unsafe_allow_html=True)
 
     # Load model and encoder
-    model_path = os.path.join(os.getcwd(), "models", "Gallbladder31.pth")  # Assuming models folder in the root directory
-    encoder_path = os.path.join(os.getcwd(), "models", "encoderr.pkl") 
+    model_path = os.path.join(os.getcwd(),"Gallbladder31.pth")# Assuming models folder in the root directory
+    if not os.path.exists(model_path):
+        with st.spinner("Downloading model..."):
+            response = requests.get(model_url)
+            with open(model_path, "wb") as f:
+                f.write(response.content)
+           st.success("Model downloaded successfully!")
+    encoder_path = os.path.join(os.getcwd(),"encoderr.pkl") 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     encoder = load_encoder(encoder_path)
     num_classes = len(encoder.classes_)
